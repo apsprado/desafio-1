@@ -35,7 +35,15 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
+
+    //Usuario
+    Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+    Route::get('/user.create.update', [App\Http\Controllers\UserController::class, 'create'])->name('user.create.update');
+    Route::post('/user.store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+    Route::get('/user.edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+    Route::patch('/user.update/{id}', [App\Http\Controllers\UserControler::class, 'update'])->name('user.update');
+    Route::delete('/user.delete/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.delete');
+
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
