@@ -1,9 +1,11 @@
 <?php
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UsersTableSeeder extends Seeder
 {
@@ -14,14 +16,22 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
+        $this->criaAdmin();
+
+    }
+
+    private function criaAdmin(): void
+    {
+        $user = User::query()->firstOrCreate([
             'id' => 1,
-            'name' => 'Admin Admin',
-            'email' => 'admin@white.com',
+            'name' => 'Administrador',
+            'email' => 'admin@dixbpo.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('secret'),
+            'password' => Hash::make('12345678'),
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
+        $user->syncRoles(Role::findById('1'));
     }
 }

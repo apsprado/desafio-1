@@ -15,15 +15,21 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form class="form" method="post" action="{{ route('register') }}">
+                        <form class="form" method="post"
+                            action="{{ $user ? route('user.update', $user->id) : route('user.store') }}">
                             @csrf
+
+                            @if ($user)
+                                @method('PATCH')
+                            @endif
                             <div class="row">
                                 <label class="col-sm-2 col-form-label">Name</label>
                                 <div class="col-sm-10">
                                     <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
-                                        <input type="text" name="name"
+                                        <input value="{{ $user ? $user->name : '' }}" type="text"
+                                            placeholder="{{ _('Name') }}"
                                             class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                                            placeholder="{{ _('Name') }}" value="{{ old('name') }}">
+                                            id="name" name="name" />
                                         @include('alerts.feedback', ['field' => 'name'])
                                     </div>
                                 </div>
@@ -56,6 +62,23 @@
                                     <div class="form-group">
                                         <input type="password" name="password_confirmation" class="form-control"
                                             placeholder="{{ _('Confirm Password') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label">Role</label>
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                        <select {{ $user ? 'disabled' : '' }} class="form-control" name="role_id"
+                                            {{ $user ? '' : 'required' }}>
+                                            <option selected disabled hidden>Selecione um cargo</option>
+                                            @foreach ($roles as $role)
+                                                <option
+                                                    {{ $user ? ($user->getRoleNames()->first() == $role->name ? 'selected' : '') : '' }}
+                                                    value="{{ $role->id }}">{{ $role->name }}</option>
+                                            @endforeach
+                                        </select>
+
                                     </div>
                                 </div>
                             </div>

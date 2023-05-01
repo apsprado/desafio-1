@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -22,11 +24,20 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('users.create');
+        $user = [];
+        $roles = Role::get();
+        return view('users.create', compact('user', 'roles'));
     }
 
     public function store(UserRequest $request)
     {
-        # code...
+        $atributos = $request->validated();
+        $atributos['password'] = Hash::make($atributos['password']);
+
+        $user = User::create($atributos);
+        $user->syncRoles(Role::findById($atributos['role_id']));
+        return redirect()->route('user.index');
     }
+
+
 }

@@ -36,7 +36,7 @@
                                             <td>
                                                 <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                                             </td>
-                                            <td>Role</td>
+                                            <td>{{ $user?->getRoleNames()->first() }}</td>
                                             <td>Yes</td>
                                             <td>{{ $user->created_at }}</td>
                                             <td class="text-right">
