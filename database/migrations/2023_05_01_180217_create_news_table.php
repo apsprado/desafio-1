@@ -14,16 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id('id');
             $table->string('title', 100);
             $table->string('lead', 191);
             $table->string('image', 191)->nullable();
             $table->text('body');
-            $table->unsignedInteger('user_id')->nullable();
-
-            // Foreign keys
-            $table->foreign('user_id')->references('id')->on('users');
-
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });

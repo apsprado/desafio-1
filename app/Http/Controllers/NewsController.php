@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class NewsController extends Controller
 {
@@ -15,7 +17,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        //
+        return view('news.index', ['news' => News::where('user_id',Auth::user()->id)->paginate(30)]);
     }
 
     /**
@@ -25,7 +27,7 @@ class NewsController extends Controller
      */
     public function create()
     {
-        //
+        return view('news.create');
     }
 
     /**
@@ -34,9 +36,14 @@ class NewsController extends Controller
      * @param  \App\Http\Requests\StoreNewsRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreNewsRequest $request)
+    public function store(StoreNewsRequest $request, News $model)
     {
-        //
+        $attributes = $request->validated();
+        $news = new News($attributes);
+        $news['image'] = $model->verifiedImage($attributes);
+        $news->save();
+        return redirect(route('news.create'))->with('status', __('Notícia cadastrada com sucesso.'));
+
     }
 
     /**
@@ -45,9 +52,9 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function show(News $news)
+    public function show(News $news, $id)
     {
-        //
+        return view('news.show', [ 'news' => $news->search($id)]);
     }
 
     /**
@@ -56,9 +63,10 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function edit(News $news)
+    public function edit(News $model, $id)
     {
-        //
+        $news = $model->where('id', $id)->get()->first();
+        return view('news.create', compact('news'));
     }
 
     /**
@@ -68,9 +76,13 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateNewsRequest $request, News $news)
+    public function update(UpdateNewsRequest $request,  $id)
     {
-        //
+        $attributes  = $request->validated();
+        $news = News::find($id);
+        $news['image'] = News::verifiedImage($attributes);
+        $news->update($attributes);
+        return redirect()->route('news.index');
     }
 
     /**
@@ -79,8 +91,11 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function destroy(News $news)
+    public function destroy(News $model, $id)
     {
-        //
+        $news = $model->search($id);
+        if ($news->user != Auth::user()) return back();
+        $news->delete();
+        return redirect()->route('news.index');
     }
 }

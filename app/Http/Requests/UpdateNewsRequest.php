@@ -24,7 +24,11 @@ class UpdateNewsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|string|min:10',
+            'lead' => 'required|string|min:10',
+            'image' => 'string',
+            'body' => 'required|string|min:100',
+            'user_id' => 'required|integer'
         ];
     }
 }
