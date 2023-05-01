@@ -38,9 +38,9 @@
                                 <label class="col-sm-2 col-form-label">E-mail</label>
                                 <div class="col-sm-10">
                                     <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                                        <input type="email" name="email"
+                                        <input {{ $user ? 'disabled' : '' }} type="email" name="email"
                                             class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                            placeholder="{{ _('Email') }}" value="{{ old('email') }}">
+                                            placeholder="{{ _('Email') }}" value="{{ $user ? $user->email : '' }}"">
                                         @include('alerts.feedback', ['field' => 'email'])
                                     </div>
                                 </div>
@@ -49,7 +49,7 @@
                                 <label class="col-sm-2 col-form-label">Password</label>
                                 <div class="col-sm-10">
                                     <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
-                                        <input type="password" name="password"
+                                        <input {{ $user ? 'disabled' : '' }} type="password" name="password"
                                             class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
                                             placeholder="{{ _('Password') }}">
                                         @include('alerts.feedback', ['field' => 'password'])
@@ -60,8 +60,8 @@
                                 <label class="col-sm-2 col-form-label">Confirm Password</label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <input type="password" name="password_confirmation" class="form-control"
-                                            placeholder="{{ _('Confirm Password') }}">
+                                        <input {{ $user ? 'disabled' : '' }} type="password" name="password_confirmation"
+                                            class="form-control" placeholder="{{ _('Confirm Password') }}">
                                     </div>
                                 </div>
                             </div>

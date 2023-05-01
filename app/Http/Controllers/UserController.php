@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,6 +39,27 @@ class UserController extends Controller
         $user->syncRoles(Role::findById($atributos['role_id']));
         return redirect()->route('user.index');
     }
+
+
+    public function edit($id)
+    {
+        $user = User::query()->where('id', $id)->get()->first();
+        $roles = Role::all();
+        return view('users.create', compact('user', 'roles'));
+    }
+
+
+    public function update(UserUpdateRequest $request, $id)
+    {
+        $atributos = $request->validated();
+        User::find($id)->update($atributos);
+        return redirect()->route('user.index');
+    }
+
+
+
+
+
 
 
 }

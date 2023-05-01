@@ -41,7 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user.create.update', [App\Http\Controllers\UserController::class, 'create'])->name('user.create.update');
     Route::post('/user.store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
     Route::get('/user.edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
-    Route::patch('/user.update/{id}', [App\Http\Controllers\UserControler::class, 'update'])->name('user.update');
+    Route::patch('/user.update/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
     Route::delete('/user.delete/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.delete');
 
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
