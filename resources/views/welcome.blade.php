@@ -10,6 +10,7 @@
                         <p class="text-lead text-light">
                             {{ __('Use White Dashboard theme to create a great project.') }}
                         </p>
+                        <img src="">
                     </div>
                 </div>
             </div>

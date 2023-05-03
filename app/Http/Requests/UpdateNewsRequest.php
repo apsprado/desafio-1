@@ -13,7 +13,7 @@ class UpdateNewsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return auth()->check();
     }
 
     /**
@@ -26,9 +26,8 @@ class UpdateNewsRequest extends FormRequest
         return [
             'title' => 'required|string|min:10',
             'lead' => 'required|string|min:10',
-            'image' => 'string',
-            'body' => 'required|string|min:100',
-            'user_id' => 'required|integer'
+            'body' => 'required|string|min:10',
+            'user_id' => 'required'
         ];
     }
 }

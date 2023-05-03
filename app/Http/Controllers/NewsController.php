@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use Illuminate\Http\Request;
+
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use Illuminate\Database\Eloquent\Model;
@@ -15,9 +17,11 @@ class NewsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('news.index', ['news' => News::where('user_id',Auth::user()->id)->paginate(30)]);
+        return view('news.index', ['news' => News::where('user_id', Auth::user()->id)
+                                    ->where('title', 'LIKE', "%{$request->search}%")
+                                    ->paginate(30)]);
     }
 
     /**
@@ -27,7 +31,8 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('news.create');
+        $news = [];
+        return view('news.create', compact('news'));
     }
 
     /**
@@ -36,14 +41,12 @@ class NewsController extends Controller
      * @param  \App\Http\Requests\StoreNewsRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreNewsRequest $request, News $model)
+    public function store(StoreNewsRequest $request)
     {
         $attributes = $request->validated();
-        $news = new News($attributes);
-        $news['image'] = $model->verifiedImage($attributes);
-        $news->save();
-        return redirect(route('news.create'))->with('status', __('Notícia cadastrada com sucesso.'));
-
+        $attributes['user_id'] = Auth::user()->id;
+        $news = News::create($attributes);
+        return redirect()->route('news.index');
     }
 
     /**
@@ -52,9 +55,10 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function show(News $news, $id)
+    public function show($id)
     {
-        return view('news.show', [ 'news' => $news->search($id)]);
+        $news = News::query()->where('id', $id)->get()->first();
+        return view('news.show', compact('news'));
     }
 
     /**
@@ -63,9 +67,9 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function edit(News $model, $id)
+    public function edit($id)
     {
-        $news = $model->where('id', $id)->get()->first();
+        $news = News::query()->where('id', $id)->get()->first();
         return view('news.create', compact('news'));
     }
 
@@ -76,12 +80,10 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateNewsRequest $request,  $id)
+    public function update(UpdateNewsRequest $request, $id)
     {
         $attributes  = $request->validated();
-        $news = News::find($id);
-        $news['image'] = News::verifiedImage($attributes);
-        $news->update($attributes);
+        News::find($id)->update($attributes);
         return redirect()->route('news.index');
     }
 
@@ -94,7 +96,9 @@ class NewsController extends Controller
     public function destroy(News $model, $id)
     {
         $news = $model->search($id);
-        if ($news->user != Auth::user()) return back();
+        if ($news->user != Auth::user()->id) {
+            return back();
+        }
         $news->delete();
         return redirect()->route('news.index');
     }
