@@ -1,4 +1,4 @@
-@extends('layouts.app', ['pageSlug' => 'creat-user'])
+@extends('layouts.app', ['pageSlug' => 'creat-news'])
 
 @section('content')
     <div class="content">
@@ -8,7 +8,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
-                                <h4 class="card-title">Create Users</h4>
+                                <h4 class="card-title">Create News</h4>
                             </div>
                             <div class="col-4 text-right">
                             </div>
@@ -16,69 +16,42 @@
                     </div>
                     <div class="card-body">
                         <form class="form" method="post"
-                            action="{{ $user ? route('user.update', $user->id) : route('user.store') }}">
+                            action="{{ $news ? route('news.update', $news->id) : route('news.store') }}">
                             @csrf
 
-                            @if ($user)
+                            @if ($news)
                                 @method('PATCH')
                             @endif
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">Name</label>
+                                <label class="col-sm-2 col-form-label">Title</label>
                                 <div class="col-sm-10">
-                                    <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
-                                        <input value="{{ $user ? $user->name : '' }}" type="text"
-                                            placeholder="{{ _('Name') }}"
-                                            class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                                            id="name" name="name" />
-                                        @include('alerts.feedback', ['field' => 'name'])
+                                    <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
+                                        <input value="{{ $news ? $news->title : '' }}" type="text" name="title"
+                                            placeholder="{{ _('Title') }}"
+                                            class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" />
+                                        @include('alerts.feedback', ['field' => 'title'])
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">E-mail</label>
+                                <label class="col-sm-2 col-form-label">Lead</label>
                                 <div class="col-sm-10">
-                                    <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                                        <input {{ $user ? 'disabled' : '' }} type="email" name="email"
-                                            class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                            placeholder="{{ _('Email') }}" value="{{ $user ? $user->email : '' }}"">
-                                        @include('alerts.feedback', ['field' => 'email'])
+                                    <div class="form-group{{ $errors->has('lead') ? ' has-danger' : '' }}">
+                                        <input {{ $news ? $news->lead : '' }} type="text" name="lead"
+                                            class="form-control{{ $errors->has('lead') ? ' is-invalid' : '' }}"
+                                            placeholder="{{ _('Lead') }}" value="{{ $news ? $news->lead : '' }}"">
+                                        @include('alerts.feedback', ['field' => 'lead'])
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">Password</label>
+                                <label class="col-sm-2 col-form-label">Text</label>
                                 <div class="col-sm-10">
-                                    <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
-                                        <input {{ $user ? 'disabled' : '' }} type="password" name="password"
-                                            class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
-                                            placeholder="{{ _('Password') }}">
-                                        @include('alerts.feedback', ['field' => 'password'])
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label class="col-sm-2 col-form-label">Confirm Password</label>
-                                <div class="col-sm-10">
-                                    <div class="form-group">
-                                        <input {{ $user ? 'disabled' : '' }} type="password" name="password_confirmation"
-                                            class="form-control" placeholder="{{ _('Confirm Password') }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label class="col-sm-2 col-form-label">Role</label>
-                                <div class="col-sm-10">
-                                    <div class="form-group">
-                                        <select {{ $user ? 'disabled' : '' }} class="form-control" name="role_id"
-                                            {{ $user ? '' : 'required' }}>
-                                            <option selected disabled hidden>Selecione um cargo</option>
-                                            @foreach ($roles as $role)
-                                                <option
-                                                    {{ $user ? ($user->getRoleNames()->first() == $role->name ? 'selected' : '') : '' }}
-                                                    value="{{ $role->id }}">{{ $role->name }}</option>
-                                            @endforeach
-                                        </select>
-
+                                    <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
+                                        <textarea name="body" id="body" class="form-control{{ $errors->has('body') ? ' is-invalid' : '' }}"
+                                            rows="20">
+                                            {{ $news ? $news->body : '' }}</textarea>
+                                        @include('alerts.feedback', ['field' => 'body'])
                                     </div>
                                 </div>
                             </div>

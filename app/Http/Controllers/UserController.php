@@ -34,7 +34,6 @@ class UserController extends Controller
     {
         $atributos = $request->validated();
         $atributos['password'] = Hash::make($atributos['password']);
-
         $user = User::create($atributos);
         $user->syncRoles(Role::findById($atributos['role_id']));
         return redirect()->route('user.index');
@@ -62,7 +61,4 @@ class UserController extends Controller
         User::query()->where('id', $id)->delete();
         return redirect()->route('user.index');
     }
-
-
-
 }

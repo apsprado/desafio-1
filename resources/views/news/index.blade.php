@@ -14,6 +14,23 @@
                                 <a href="{{ route('news.create') }}" class="btn btn-sm btn-primary">Add News</a>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <form class="form" method="get" action="{{ route('news.index') }}">
+                                    <div class="form-row">
+                                        <div class="col-2">
+                                            <h3 class="card-title">Search:</h3>
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="text" class="form-control" name="search" id="search">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="submit" class="btn btn-sm btn-primary">GO!</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
 
@@ -43,6 +60,8 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('news.show', $new->id) }}">Show</a>
                                                         <a class="dropdown-item"
                                                             href="{{ route('news.edit', $new->id) }}">Edit</a>
 

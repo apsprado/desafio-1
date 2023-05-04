@@ -18,7 +18,7 @@ class NewsSeeder extends Seeder
         $news = News::query()->firstOrCreate([
             'id' => 1,
             'title' => 'Lorem Ipsum',
-            'lead' => 'Leno is a mobile app landing page Bootstrap 5 HTML template designed to help you present mobile apps to the online audience and convince visitors to download from the popular app stores.',
+            'lead' => 'admin@dixbpo.com',
             'image' => 'foto.jpg',
             'body' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis efficitur mauris. Morbi id quam at nulla dapibus tempus a vel magna. Pellentesque placerat scelerisque velit, vitae vestibulum nisl ornare sed. Nunc fringilla commodo ex ac semper. Donec enim odio, imperdiet eget magna quis, rhoncus laoreet orci. Quisque mattis dui vehicula, interdum erat eget, sodales orci. Quisque tellus turpis, suscipit id laoreet nec, tincidunt quis ligula.',
             'user_id' => '1',
